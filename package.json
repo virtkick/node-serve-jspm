@@ -1,0 +1,26 @@
+{
+  "name": "serve-jspm",
+  "version": "1.0.0",
+  "description": "Express middleware to compile, cache and serve JSPM javascripts on the server. Much much faster than compiling with babel in the browser.",
+  "repository": "virtkick/serve-jspm",
+  "author": "Damian Kaczmarek <rush@virtkick.com>",
+  "license": "MIT",
+  "keywords": [],
+  "main": "es5/serve-jspm.js",
+  "dependencies": {
+    "bluebird": "^3.4.6",
+    "mkdirp": "^0.5.1"
+  },
+  "peerDependencies": {
+    "jspm": "^0.17.0-beta.32"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.18.0",
+    "fast-async": "^6.1.2",
+    "jspm": "^0.17.0-beta.32"
+  },
+  "scripts": {
+    "build": "babel src -d es5 -s inline",
+    "prepublish": "npm run build"
+  }
+}

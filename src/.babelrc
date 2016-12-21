@@ -1,0 +1,11 @@
+{
+  "presets": [
+    "es2015-node6"
+  ],
+  "plugins": [
+    ["transform-async-to-module-method", {
+      "module": "bluebird",
+      "method": "coroutine"
+    }]
+  ]
+}
