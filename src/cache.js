@@ -1,18 +1,17 @@
 import Promise from 'bluebird';
 import {readFile, writeFile} from 'fs';
 import {mkdirp as _mkdirp} from 'mkdirp';
+import {join as pathJoin} from 'path';
+import {createHash} from 'crypto';
+
 const mkdirp = Promise.promisify(_mkdirp);
 const readFileAsync = Promise.promisify(readFile);
 const writeFileAsync = Promise.promisify(writeFile);
 
-import {join as pathJoin} from 'path';
-import {createHash} from 'crypto';
+const cacheDir = '.cache';
 
-let path = require('path');
-let crypto = require('crypto');
-
-const cacheDirPromise = mkdirp(path.join(__dirname, '.cache')).then(() => {
-  return path.join(__dirname, '.cache');
+const cacheDirPromise = mkdirp(cacheDir).then(() => {
+  return cacheDir;
 });
 
 function sha256(data) {
@@ -22,7 +21,7 @@ function sha256(data) {
 function saveToCache(key, data) {
   key = sha256(key);
   return cacheDirPromise.then((cacheDir) => {
-    return writeFileAsync(path.join(cacheDir, key), data);
+    return writeFileAsync(pathJoin(cacheDir, key), data);
   }).then(() => {
     return data;
   });
@@ -31,10 +30,10 @@ function saveToCache(key, data) {
 function getFromCache(key) {
   key = sha256(key);
   return cacheDirPromise.then((cacheDir) => {
-    return readFileAsync(path.join(cacheDir, key), 'utf8');
+    return readFileAsync(pathJoin(cacheDir, key), 'utf8');
   }).catch({
     code: 'ENOENT'
-  }, () => {});
+  }, () => null);
 }
 
 

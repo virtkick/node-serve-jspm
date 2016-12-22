@@ -1,10 +1,10 @@
 # node-serve-jspm
-Express middleware to compile, cache and serve JSPM javascripts on the server. Much much faster than compiling with babel in the browser.
+Express middleware to transpile, cache and serve JSPM javascripts on server-side. Much much faster than compiling with babel in the browser.
 
 This package will:
-* Use JSPM's own babel modules
-* Read metadata babelConfig for each file that you may have defined in your `package.json`
-* Use ETag to cache files in the browser
+* Use JSPM's plugins such as babel/jsx
+* Automatically read metadata for each file that you may have defined in your `package.json`
+* Use ETag to cache transpiled files in the browser (304 requests)
 * Save local cache in `.cache` dir, you may need to periodically clean it
 
 TODO:
