@@ -12,6 +12,8 @@ loader.getCanonicalName = (new Builder).getCanonicalName;
 const statAsync = Promise.promisify(stat);
 const readFileAsync = Promise.promisify(readFile);
 
+import {unescape} from 'querystring';
+
 export default function serveJspm(baseDir, {plugins = {}} = {}) {
   let cachedLoaderTranslate;
 
@@ -41,7 +43,7 @@ export default function serveJspm(baseDir, {plugins = {}} = {}) {
     try {
       res.setHeader('Cache-Control', `public, max-age=0`);
       res.setHeader('content-type', 'text/javascript');
-      let pathname = req.url;
+      let pathname = unescape(req.url);
       
       let pluginHandler;
       { // handle plugins
