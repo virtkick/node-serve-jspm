@@ -1,7 +1,7 @@
 import Promise from 'bluebird';
 
 import {stat, readFile} from 'fs';
-import {join as pathJoin} from 'path';
+import {join as pathJoin, extname} from 'path';
 import {wrapFunction, handleRequest} from './cache';
 import {Loader, Builder} from 'jspm';
 
@@ -13,6 +13,8 @@ const statAsync = Promise.promisify(stat);
 const readFileAsync = Promise.promisify(readFile);
 
 import {unescape} from 'querystring';
+
+import mime from 'mime-types';
 
 export default function serveJspm(baseDir, {plugins = {}} = {}) {
   let cachedLoaderTranslate;
@@ -38,11 +40,11 @@ export default function serveJspm(baseDir, {plugins = {}} = {}) {
       outputESM: false
     });
   }
-
+  
   return async (req, res, next) => {
     try {
       res.setHeader('Cache-Control', `public, max-age=0`);
-      res.setHeader('content-type', 'text/javascript');
+      res.setHeader('content-type', mime.contentType(extname(req.url)));
       let pathname = unescape(req.url);
       
       let pluginHandler;
@@ -68,7 +70,7 @@ export default function serveJspm(baseDir, {plugins = {}} = {}) {
         contents = await Promise.try(() => pluginHandler(contents, pathname, baseDir));
       }
       contents = await doTranslate(contents, pathname);
-      
+            
       res.end(contents);
     } catch(err) {
       if(err.code === 'ENOENT') {
