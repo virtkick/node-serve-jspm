@@ -42,6 +42,7 @@ export default function serveJspm(baseDir, {plugins = {}} = {}) {
   }
   
   return async (req, res, next) => {
+    let sourceFound;
     try {
       res.setHeader('Cache-Control', `public, max-age=0`);
       res.setHeader('content-type', mime.contentType(extname(req.url)));
@@ -60,7 +61,8 @@ export default function serveJspm(baseDir, {plugins = {}} = {}) {
       }
       
       var fullDir = pathJoin(baseDir, pathname);
-      let {mtime} = await statAsync(fullDir);      
+      let {mtime} = await statAsync(fullDir);
+      sourceFound = true;
       let metadata = await getMetadata(pathname);
 
       if(handleRequest(req, res, { mtime, fullDir, metadata })) { return true; }
@@ -73,7 +75,7 @@ export default function serveJspm(baseDir, {plugins = {}} = {}) {
             
       res.end(contents);
     } catch(err) {
-      if(err.code === 'ENOENT') {
+      if(err.code === 'ENOENT' && !sourceFound) {
         res.status(404).end();
       } else {
         console.error(err.stack);
