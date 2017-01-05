@@ -1,6 +1,6 @@
 {
   "name": "serve-jspm",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "Express middleware to compile, cache and serve JSPM javascripts on the server. Much much faster than compiling with babel in the browser.",
   "repository": "virtkick/node-serve-jspm",
   "author": "Damian Kaczmarek <rush@virtkick.com>",
