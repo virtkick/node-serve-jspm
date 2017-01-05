@@ -16,7 +16,7 @@ import {unescape} from 'querystring';
 
 import mime from 'mime-types';
 
-export default function serveJspm(baseDir, {plugins = {}} = {}) {
+export default function serveJspm(baseDir, {failOnNotFound = false, plugins = {}} = {}) {
   let cachedLoaderTranslate;
 
   async function getMetadata(pathname) {
@@ -43,6 +43,14 @@ export default function serveJspm(baseDir, {plugins = {}} = {}) {
   
   return async (req, res, next) => {
     let sourceFound;
+    
+    let notFound = () => {
+      if(failOnNotFound) {
+        return res.status(404).end();
+      }
+      return next();
+    };
+    
     try {
       res.setHeader('Cache-Control', `public, max-age=0`);
       res.setHeader('content-type', mime.contentType(extname(req.url)));
@@ -53,15 +61,18 @@ export default function serveJspm(baseDir, {plugins = {}} = {}) {
         let m;
         if(m = pathname.match(/\.(\w+)\.js$/)) {
           let plugin = m[1];
-          if(plugins[plugin]) {
+          if(plugins.hasOwnProperty(plugin)) {
             pluginHandler = plugins[plugin];
             pathname = pathname.replace(/\.(\w+)\.js$/, (m, ext) => `.${ext}`);
           }
         }
       }
-      
       var fullDir = pathJoin(baseDir, pathname);
-      let {mtime} = await statAsync(fullDir);
+      let stat = await statAsync(fullDir);
+      if(!stat.isFile()) {
+        return notFound();
+      }
+      let {mtime} = stat;
       sourceFound = true;
       let metadata = await getMetadata(pathname);
 
@@ -76,7 +87,7 @@ export default function serveJspm(baseDir, {plugins = {}} = {}) {
       res.end(contents);
     } catch(err) {
       if(err.code === 'ENOENT' && !sourceFound) {
-        res.status(404).end();
+        return notFound();
       } else {
         console.error(err.stack);
         res.status(500).end();
