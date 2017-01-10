@@ -19,10 +19,12 @@
   "devDependencies": {
     "babel-cli": "^6.18.0",
     "fast-async": "^6.1.2",
-    "jspm": "^0.17.0-beta.32"
+    "jspm": "^0.17.0-beta.32",
+    "request": "^2.79.0"
   },
   "scripts": {
     "build": "babel src -d es5 -s inline",
-    "prepublish": "npm run build"
+    "prepublish": "npm run build",
+    "test": "./tests/run-tests.sh"
   }
 }
