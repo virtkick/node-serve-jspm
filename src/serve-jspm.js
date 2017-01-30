@@ -15,7 +15,7 @@ import {unescape} from 'querystring';
 import mime from 'mime-types';
 
 export default function serveJspm(baseDir, {failOnNotFound = false, plugins = {}} = {}) {
-  let doCompile = wrapFunction(function(fullDir) {
+  let doCompile = (function(fullDir) {
     return builder.compile(fullDir, {
       sourceMaps: 'inline'
     }).get('source');
@@ -59,11 +59,16 @@ export default function serveJspm(baseDir, {failOnNotFound = false, plugins = {}
                         
       let contents;
       {
-        if(pluginHandler) {
-          contents = await Promise.try(() => pluginHandler(contents, pathname, baseDir));
-        } else {
-          contents = await doCompile(fullDir, mtime);
-        }
+        var accept = req.headers['accept'];
+        //if (accept && accept.indexOf('application/x-es-module') !== -1) {
+          if(pluginHandler) {
+            contents = await Promise.try(() => pluginHandler(contents, pathname, baseDir));
+          } else {
+            contents = await doCompile(fullDir, mtime);
+          }
+        //} else {
+//          contents = await readFileAsync(fullDir, 'utf8');
+        //}
       };
           
       res.end(contents);
@@ -71,6 +76,7 @@ export default function serveJspm(baseDir, {failOnNotFound = false, plugins = {}
       if(err.code === 'ENOENT' && !sourceFound) {
         return notFound();
       } else {
+        
         console.error(err.stack);
         res.status(500)
         res.end();

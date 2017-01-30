@@ -20,13 +20,16 @@
     "babel-cli": "^6.18.0",
     "babel-plugin-transform-async-to-module-method": "^6.22.0",
     "babel-preset-es2015-node6": "^0.4.0",
+    "chai": "^3.5.0",
     "fast-async": "^6.1.2",
     "jspm": "0.17.0-beta.36",
+    "mocha": "^3.2.0",
     "request": "^2.79.0"
   },
   "scripts": {
     "build": "babel src -d es5 -s inline",
     "prepublish": "npm run build",
-    "test": "./tests/run-tests.sh"
+    "prepare-tests": "(cd tests/jsx-babel && jspm install) && (cd tests/jsx-loader && jspm install)",
+    "test": "npm run build && mocha tests"
   }
 }
