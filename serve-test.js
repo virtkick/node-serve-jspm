@@ -2,7 +2,7 @@ const serveJspm = require('./').default;
 const http = require('http');
 
 const server = http.createServer((req, res) => {
-  res.status = (status) => (res.statusCode = status);
+  res.status = (status) => { res.statusCode = status; return res;}
   
   serveJspm('./')(req, res, () => {
     console.error('Not found, not working');
@@ -26,4 +26,9 @@ server.once('listening', () => {
     console.log(data.body);
     process.exit(0);
   });
+});
+
+process.on('uncaughtException', err => {
+  console.error('Uncaught exception', err.stack);
+  process.exit(1);
 });

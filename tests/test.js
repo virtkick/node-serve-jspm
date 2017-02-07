@@ -33,7 +33,7 @@ describe('serve-jspm', () => {
   });
   it('should serve json files', () => {
     return runRequest('jsx-babel', 'jspm_packages/npm/babel-runtime@6.20.0.json').then(out => {
-      out.should.match(/^System.register/);
+      out.should.match(/^{/);
     });
   });
   
