@@ -30,6 +30,6 @@
     "build": "babel src -d es5 -s inline",
     "prepublish": "npm run build",
     "prepare-tests": "for file in $(find tests/ -name jspm.config.js);do (cd $(dirname $file) && jspm install);done",
-    "test": "npm run build && mocha tests"
+    "test": "npm run build && mocha -t 5000 tests"
   }
 }
