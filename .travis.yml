@@ -1,0 +1,9 @@
+language: node_js
+node_js:
+- 7
+script:
+- npm install
+- npm run prepare-tests
+- npm test
+
+
