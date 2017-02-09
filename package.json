@@ -1,6 +1,6 @@
 {
   "name": "serve-jspm",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "description": "Express middleware to compile, cache and serve JSPM javascripts on the server. Much much faster than compiling with babel in the browser.",
   "repository": "virtkick/node-serve-jspm",
   "author": "Damian Kaczmarek <rush@virtkick.com>",
@@ -14,7 +14,7 @@
     "mkdirp": "^0.5.1"
   },
   "peerDependencies": {
-    "jspm": "0.17.0-beta.38"
+    "jspm": "0.17.0-beta.39"
   },
   "devDependencies": {
     "babel-cli": "^6.18.0",
@@ -22,7 +22,7 @@
     "babel-preset-es2015-node6": "^0.4.0",
     "chai": "^3.5.0",
     "fast-async": "^6.1.2",
-    "jspm": "0.17.0-beta.38",
+    "jspm": "0.17.0-beta.39",
     "mocha": "^3.2.0",
     "request": "^2.79.0"
   },
