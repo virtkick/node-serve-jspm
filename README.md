@@ -1,4 +1,4 @@
-# node-serve-jspm
+# node-serve-jspm [![Build Status](https://travis-ci.org/virtkick/node-serve-jspm.svg?branch=master)](https://travis-ci.org/virtkick/node-serve-jspm)
 Express middleware to transpile, cache and serve JSPM javascripts on server-side. Much much faster than compiling with babel in the browser.
 
 This package will:
